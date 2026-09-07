@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from pypinyin import lazy_pinyin, Style
+from snownlp import SnowNLP
 
 app = FastAPI()
 
@@ -32,12 +34,43 @@ class AnalyzeRequest(BaseModel):
 def get_profile():
     return profile
 
+def score_label(score):
+    if score >= 0.6:
+        return "偏积极"
+    elif score <= 0.4:
+        return "偏消极"
+    else:
+        return "中性"
+
+########################################################
+# from openai import OpenAI
+
+# client = OpenAI(
+#     api_key="sk-bScK7SJPivBDoApl4",
+#     base_url="http://127.0.0.1:8317/v1"
+# )
+
+# def get_completion(prompt):
+#     response = client.chat.completions.create(
+#         model="gemini-3.8-flash-high",
+#         messages=[
+#             {"role": "user", "content": prompt}
+#         ]
+#     )
+#     return response.choices[0].message.content
+
+########################################################
+
 @app.post("/api/analyze")
 def analyze(req: AnalyzeRequest):
-    return {
-        "text": req.text,
-        "score": 0.5,
-        "label": "偏平静",
-        "pinyin": "（模块 6 再说）",
-    }
+    text = req.text
+    score = round(SnowNLP(text).sentiments, 2)
 
+    return {
+        "text": text,
+        "score": score,
+        "label": score_label(score),
+        "pinyin": " ".join(
+            lazy_pinyin(text, style=Style.TONE)
+        ),
+    }
