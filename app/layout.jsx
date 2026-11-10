@@ -14,16 +14,29 @@ import "../css/nav.css";
 import "../css/cards.css";
 import "../css/lab.css";
 import "../css/responsive.css";
+import { GoogleTagManager } from "@next/third-parties/google";
 
 export const metadata = {
   title: "zero to tech",
   description: "个人主页 + 文字实验室",
 };
 
+const GTM_ID = "GTM-PBHQNFBX";
+
 export default function RootLayout({ children }) {
   return (
     <html lang="zh-CN">
+      <GoogleTagManager gtmId={GTM_ID} />
       <body>
+        {/* Google Tag Manager (noscript) 降级支持 */}
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
         <div className="app-shell">
           <div className="page-shell">
             <main className="page-content">{children}</main>

@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@next/third-parties": "^15.5.29",
     "animejs": "^4.4.1",
     "next": "^15.0.0",
     "react": "^19.2.6",
