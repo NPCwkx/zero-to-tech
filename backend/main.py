@@ -69,7 +69,7 @@ def score_label(score):
 # from openai import OpenAI
 
 # client = OpenAI(
-#     api_key="sk-bScK7SJPivBDoApl4",
+#     api_key="sk-key",
 #     base_url="http://127.0.0.1:8317/v1"
 # )
 
